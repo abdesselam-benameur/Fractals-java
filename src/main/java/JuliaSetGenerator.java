@@ -19,8 +19,8 @@ public class JuliaSetGenerator {
     private static final double X_MAX = 0.00001;
     private static final double Y_MIN = -0.00001;
     private static final double Y_MAX = 0.00001;
-    private static final int WIDTH = 2000;
-    private static final int HEIGHT = 2000;
+    private static final int WIDTH = 8000;
+    private static final int HEIGHT = 8000;
     private static final int MAX_ITERATIONS_PER_PIXEL = 10;
     private static final double MAX_DISTANCE = 2.0;
     private static final double MAX_DISTANCE_SQUARED = 4.0;
@@ -69,7 +69,7 @@ public class JuliaSetGenerator {
     }
 
     private int getRGB(int iterations) {
-        int rgb = 0;
+        int rgb;
         if (iterations == MAX_ITERATIONS) {
             rgb = 0x000000;
         } else {
