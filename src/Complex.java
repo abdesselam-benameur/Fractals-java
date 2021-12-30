@@ -55,6 +55,10 @@ public class Complex {
         }
     }
 
+    public Complex square() {
+        return new Complex(re * re - im * im, 2 * re * im);
+    }
+
     public String toString() {
         if (im == 0) {
             return re + "";

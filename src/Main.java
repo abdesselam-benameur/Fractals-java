@@ -9,7 +9,7 @@ public class Main {
 //    }
 
     public static void main(String[] args) {
-        Complex z = new Complex(-5.6, -4.3);
-        System.out.println(z);
+        JuliaSetGenerator juliaSetGenerator = new JuliaSetGenerator();
+        juliaSetGenerator.generate();
     }
 }
