@@ -1,9 +1,6 @@
 package cpoo.projetcpoo;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.function.Function;
 
 public class JuliaSetGenerator extends FractalSetGenerator {
@@ -45,7 +42,7 @@ public class JuliaSetGenerator extends FractalSetGenerator {
     }
 
     @Override
-    public void generate(String fileName) {
+    public BufferedImage generate() {
         Complex c = new Complex(cr, ci);
         Function<Complex, Complex> f = (z) -> z.square().add(c);
         BufferedImage bufferedImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -58,10 +55,6 @@ public class JuliaSetGenerator extends FractalSetGenerator {
             }
         }
 
-        try {
-            ImageIO.write(bufferedImage, "png", new File(fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return bufferedImage;
     }
 }

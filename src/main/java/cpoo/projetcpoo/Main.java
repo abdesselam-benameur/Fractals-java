@@ -1,6 +1,12 @@
 package cpoo.projetcpoo;
 
+import javafx.application.Application;
 import org.apache.commons.cli.*;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Main {
 
@@ -34,6 +40,7 @@ public class Main {
         options.addOption("ymax", true, "Y_MAX");
         options.addOption("z", "zoom", true, "zoom factor");
         options.addOption("f", "filename", true, "the filename of the generated image");
+        options.addOption("g", "gui", false, "launch the GUI version");
         options.addOption("help", false, "print this message");
 
         // create the command line parser
@@ -43,10 +50,16 @@ public class Main {
             // parse the command line arguments
             cmd = parser.parse(options, args);
 
-            // if help is requested, display a help message
-            if (cmd.hasOption("help")) {
+            // if no option is specified or help is requested, display the help message
+            if (cmd.getOptions().length == 0 || cmd.hasOption("help")) {
                 HelpFormatter formatter = new HelpFormatter();
-                formatter.printHelp("java -jar mandelbrot.jar", options);
+                formatter.printHelp("java -jar ProjetCPOO.jar", options);
+                System.exit(0);
+            }
+
+            // if the GUI option is set, launch the GUI version
+            if (cmd.hasOption("g")) {
+                Application.launch(cpoo.projetcpoo.GUIMain.class);
                 System.exit(0);
             }
 
@@ -57,7 +70,7 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid width");
                     HelpFormatter formatter = new HelpFormatter();
-                    formatter.printHelp("java -jar mandelbrot.jar", options);
+                    formatter.printHelp("java -jar ProjetCPOO.jar", options);
                     System.exit(1);
                 }
             }
@@ -69,7 +82,7 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid height");
                     HelpFormatter formatter = new HelpFormatter();
-                    formatter.printHelp("java -jar mandelbrot.jar", options);
+                    formatter.printHelp("java -jar ProjetCPOO.jar", options);
                     System.exit(1);
                 }
             }
@@ -86,7 +99,7 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid real part of the constant");
                     HelpFormatter formatter = new HelpFormatter();
-                    formatter.printHelp("java -jar mandelbrot.jar", options);
+                    formatter.printHelp("java -jar ProjetCPOO.jar", options);
                     System.exit(1);
                 }
             }
@@ -98,7 +111,7 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid imaginary part of the constant");
                     HelpFormatter formatter = new HelpFormatter();
-                    formatter.printHelp("java -jar mandelbrot.jar", options);
+                    formatter.printHelp("java -jar ProjetCPOO.jar", options);
                     System.exit(1);
                 }
             }
@@ -110,7 +123,7 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid max iterations");
                     HelpFormatter formatter = new HelpFormatter();
-                    formatter.printHelp("java -jar mandelbrot.jar", options);
+                    formatter.printHelp("java -jar ProjetCPOO.jar", options);
                     System.exit(1);
                 }
             }
@@ -122,7 +135,7 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid X_MIN");
                     HelpFormatter formatter = new HelpFormatter();
-                    formatter.printHelp("java -jar mandelbrot.jar", options);
+                    formatter.printHelp("java -jar ProjetCPOO.jar", options);
                     System.exit(1);
                 }
             }
@@ -134,7 +147,7 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid X_MAX");
                     HelpFormatter formatter = new HelpFormatter();
-                    formatter.printHelp("java -jar mandelbrot.jar", options);
+                    formatter.printHelp("java -jar ProjetCPOO.jar", options);
                     System.exit(1);
                 }
             }
@@ -146,7 +159,7 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid Y_MIN");
                     HelpFormatter formatter = new HelpFormatter();
-                    formatter.printHelp("java -jar mandelbrot.jar", options);
+                    formatter.printHelp("java -jar ProjetCPOO.jar", options);
                     System.exit(1);
                 }
             }
@@ -158,7 +171,7 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid Y_MAX");
                     HelpFormatter formatter = new HelpFormatter();
-                    formatter.printHelp("java -jar mandelbrot.jar", options);
+                    formatter.printHelp("java -jar ProjetCPOO.jar", options);
                     System.exit(1);
                 }
             }
@@ -175,7 +188,7 @@ public class Main {
                 catch (NumberFormatException e) {
                     System.err.println("Invalid zoom factor");
                     HelpFormatter formatter = new HelpFormatter();
-                    formatter.printHelp("java -jar mandelbrot.jar", options);
+                    formatter.printHelp("java -jar ProjetCPOO.jar", options);
                     System.exit(1);
                 }
             }
@@ -190,19 +203,27 @@ public class Main {
             }
 
             // generate the image
+            BufferedImage img;
             if (mandelbrot) {
                 MandelbrotSetGenerator m = new MandelbrotSetGenerator(width, height, maxIter, xMin, xMax, yMin, yMax);
-                m.generate(filename);
+                img = m.generate();
             } else {
                 JuliaSetGenerator j = new JuliaSetGenerator(width, height, maxIter, xMin, xMax, yMin, yMax, cr, ci);
-                j.generate(filename);
+                img = j.generate();
+            }
+
+            try {
+                ImageIO.write(img, "png", new File(filename));
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
             }
 
         } catch (ParseException exp) {
             // oops, something went wrong
             System.err.println("Parsing failed.  Reason: " + exp.getMessage());
             HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("java -jar mandelbrot.jar", options);
+            formatter.printHelp("java -jar ProjetCPOO.jar", options);
             System.exit(1);
         }
     }

@@ -6,16 +6,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class GUIMain extends Application {
-    public static void main(String[] args) {
-        launch(args);
-    }
+import java.io.IOException;
 
+public class GUIMain extends Application {
     @Override
-    public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Fractales_graphique.fxml"));
-        Parent root = loader.load();
+    public void start(Stage stage) throws IOException {
+        stage.setResizable(false);
+        FXMLLoader fxmlLoader = new FXMLLoader(GUIMain.class.getResource("fractales.fxml"));
+        Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
+        stage.setTitle("Fractals Generator (*_*)");
         stage.setScene(scene);
         stage.show();
     }

@@ -24,7 +24,7 @@ public class MandelbrotSetGenerator extends FractalSetGenerator {
     }
 
     @Override
-    public void generate(String fileName) {
+    public BufferedImage generate() {
         BufferedImage bufferedImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
@@ -35,10 +35,6 @@ public class MandelbrotSetGenerator extends FractalSetGenerator {
                 bufferedImage.setRGB(x, y, rgb);
             }
         }
-        try {
-            ImageIO.write(bufferedImage, "png", new File(fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return bufferedImage;
     }
 }

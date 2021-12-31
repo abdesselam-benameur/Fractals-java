@@ -1,6 +1,7 @@
 package cpoo.projetcpoo;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.function.Function;
 
 public abstract class FractalSetGenerator {
@@ -25,7 +26,7 @@ public abstract class FractalSetGenerator {
 
     public abstract int getIterations(Complex z, Function<Complex, Complex> f);
 
-    public abstract void generate(String filename);
+    public abstract BufferedImage generate();
 
     public double getX(int x) {
         return X_MIN + (X_MAX - X_MIN) * x / WIDTH;

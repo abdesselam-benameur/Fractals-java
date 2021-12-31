@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="702.0" prefWidth="926.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cpoo.projetcpoo.GUIController">
+   <children>
+      <Pane prefHeight="702.0" prefWidth="223.0" style="-fx-background-color: #deb887;">
+         <children>
+            <VBox layoutX="14.0" layoutY="11.0" prefHeight="557.0" prefWidth="198.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="xMin" />
+                        <TextField promptText="xMin" text="-2" fx:id="xmin" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="xMax" />
+                        <TextField promptText="xMax" text="2" fx:id="xmax" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="yMin" />
+                        <TextField fx:id="ymin" promptText="yMin" text="-2" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="yMax" />
+                        <TextField fx:id="ymax" promptText="yMax" text="2" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Max iterations" />
+                        <TextField fx:id="maxiter" promptText="Max iterations" text="1000" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Real part of the constant" />
+                        <TextField fx:id="cr" promptText="real_of_constant" text="-0.7269" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Imaginary part of the constant" />
+                        <TextField fx:id="ci" promptText="imag_of_constant" text="0.1889" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Zoom factor" />
+                        <TextField fx:id="zoom" promptText="Zoom factor" text="2.0" />
+                     </children>
+                  </VBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <RadioButton fx:id="julia" mnemonicParsing="false" selected="true" text="Julia">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="choice" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" text="Mandelbrot" toggleGroup="$choice">
+                           <padding>
+                              <Insets left="15.0" />
+                           </padding>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Button layoutX="36.0" layoutY="598.0" mnemonicParsing="false" onAction="#onGenerate" prefHeight="24.0" prefWidth="151.0" text="Generate" />
+         </children>
+      </Pane>
+      <ImageView fx:id="image" fitHeight="700.0" fitWidth="700.0" layoutX="223.0" onMouseClicked="#onImageClicked" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</AnchorPane>

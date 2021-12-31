@@ -101,7 +101,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>cpoo.projetcpoo/cpoo.projetcpoo.HelloApplication</mainClass>
+                            <mainClass>cpoo.projetcpoo/cpoo.projetcpoo.GUIMain</mainClass>
                         </configuration>
                     </execution>
                 </executions>
