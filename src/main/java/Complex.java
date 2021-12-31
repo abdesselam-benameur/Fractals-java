@@ -31,6 +31,14 @@ public class Complex {
         return Math.sqrt(re * re + im * im);
     }
 
+    public Complex mul(double d) {
+        return new Complex(re * d, im * d);
+    }
+
+    public Complex mul(Complex c) {
+        return new Complex(re * c.re - im * c.im, re * c.im + im * c.re);
+    }
+
     public Complex add(Complex c) {
         return new Complex(re + c.re, im + c.im);
     }
