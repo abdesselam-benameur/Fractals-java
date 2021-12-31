@@ -1,3 +1,5 @@
+package cpoo.projetcpoo;
+
 import java.awt.*;
 import java.util.function.Function;
 
@@ -23,7 +25,7 @@ public abstract class FractalSetGenerator {
 
     public abstract int getIterations(Complex z, Function<Complex, Complex> f);
 
-    public abstract void generate();
+    public abstract void generate(String filename);
 
     public double getX(int x) {
         return X_MIN + (X_MAX - X_MIN) * x / WIDTH;
@@ -34,13 +36,11 @@ public abstract class FractalSetGenerator {
     }
 
     public int getRGB(int iterations) {
-        float bright;
         if (iterations < 10) {
-            bright = 0.0f;
+            return 0xDDDDDD;
         } else {
-            bright = 1.0f;
+            return Color.getHSBColor(iterations * 0.01f, 1.0f, 1.0f).getRGB();
         }
-        return Color.getHSBColor(iterations * 0.01f, 1.0f, bright).getRGB();
     }
 
 //    public int getRGB(int iterations) {

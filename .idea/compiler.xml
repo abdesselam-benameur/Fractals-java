@@ -9,5 +9,8 @@
         <module name="ProjetCPOO" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ProjetCPOO" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
