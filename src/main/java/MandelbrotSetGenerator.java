@@ -15,8 +15,7 @@ public class MandelbrotSetGenerator extends FractalSetGenerator {
     public int getIterations(Complex z, Function<Complex, Complex> f) {
         int ite = 0;
         Complex zn = new Complex(0, 0);
-        // sortie de boucle si divergence
-        while (ite < MAX_ITERATIONS - 1 && zn.module() <= RADIUS) {// X_MIN < zn.getRe() && zn.getRe() < X_MAX && Y_MIN < zn.getIm() && zn.getIm() < Y_MAX) {
+        while (ite < MAX_ITERATIONS - 1 && zn.module() <= RADIUS) {
             zn = f.apply(zn);
             ite++;
         }
@@ -30,23 +29,9 @@ public class MandelbrotSetGenerator extends FractalSetGenerator {
             for (int y = 0; y < HEIGHT; y++) {
                 Complex c = new Complex(getX(x), getY(y));
                 Function<Complex, Complex> f = (z) -> z.square().add(c);
-                // x^8+15*x^4-16
-//                Function<Complex, Complex> f = (z) -> z.pow(8).add(z.pow(4).mul(15.0)).add(new Complex(-16.0, 0.0));
                 int iterations = getIterations(new Complex(getX(x), getY(y)), f);
-//                int rgb = getRGB(iterations);
-//                int rgb =  getRGB(iterations);
-//                int r= (255*iterations)/MAX_ITERATIONS, g=255, b=255;
-//                int rgb = new Color(r,g,b).getRGB();
-//                System.out.println(iterations);
-//                int rgb = Color.HSBtoRGB((float) iterations / MAX_ITERATIONS, (float) iterations / MAX_ITERATIONS, 0.9f);
-                float bright;
-                if (iterations < 10){
-                    bright = 0.0f;
-                } else {
-                    bright = 1.0f;
-                }
-                int rgb = Color.getHSBColor(iterations * 0.01f, 1.0f, bright).getRGB();
-                bufferedImage.setRGB(x, y, rgb); //getRGB(iterations));
+                int rgb = getRGB(iterations);
+                bufferedImage.setRGB(x, y, rgb);
             }
         }
         try {

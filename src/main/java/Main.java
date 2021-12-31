@@ -1,177 +1,160 @@
-import gnu.getopt.Getopt;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.lang.invoke.StringConcatException;
+import org.apache.commons.cli.*;
 
 public class Main {
-//    MAX_ITER=1000; RADIUS=2.;
-//    int divergenceIndex(Complex z0) {
-//        int ite = 0; Complex zn = z0;
-//// sortie de boucle si divergence
-//        while (ite < MAX_ITER-1 && |zn| <= RADIUS)
-//        zn = f(zn); ite++;
-//        return ite;
-//    }
 
-//    public static void main(String[] args) throws IOException {
-//        MandelbrotSetGenerator generator = new MandelbrotSetGenerator();
-//        BufferedImage image = generator.generateImage(1000, 1000);
-//        ImageIO.write(image, "png", new File("mandelbrot.png"));
-//    }
-
-    public static void main(String[] args) {
-        Getopt g = new Getopt("testprog", args, "w:h:a:b:c:d:t:r:i:f:p:m");
-        int c;
-        String arg;
+    public static void main(String[] args) throws ParseException {
+        // initialize the variables
         int width = 1000;
         int height = 1000;
         int maxIter = 1000;
-        double re = -0.7269 ,im = 0.1889, pas = 0.0;
+        int xMin = -2;
+        int yMin = -2;
+        int xMax = 2;
+        int yMax = 2;
+        double cr = -0.7269, ci = 0.1889;
         boolean mandelbrot = false;
-//        Complex constante = new Complex(0,0);
-        int xMin = -1;
-        int yMin = -1;
-        int xMax = 1;
-        int yMax = 1;
-        while ((c = g.getopt()) != -1)
-        {
-            switch(c)
-            {
-                case 'w':
-                    arg = g.getOptarg();
-                    try {
-                        width = Integer.parseInt(arg);
-                    }
-                    catch (NumberFormatException e) {
-                        System.err.println("width must be an integer");
-                        System.exit(1);
-                    }
-                    break;
-                case 'h':
-                    arg = g.getOptarg();
-                    try {
-                        height = Integer.parseInt(arg);
-                    }
-                    catch (NumberFormatException e) {
-                        System.err.println("height must be an integer");
-                        System.exit(1);
-                    }
-                    break;
-                case 't':
-                    arg = g.getOptarg();
-                    try {
-                        maxIter = Integer.parseInt(arg);
-                    }
-                    catch (NumberFormatException e) {
-                        System.err.println("maxIter must be an integer");
-                        System.exit(1);
-                    }
-                    break;
-                case 'a':
-                    arg = g.getOptarg();
-                    try {
-                        xMin = Integer.parseInt(arg);
-                    }
-                    catch (NumberFormatException e) {
-                        System.err.println("xMin must be an integer");
-                        System.exit(1);
-                    }
-                    break;
-                case 'b':
-                    arg = g.getOptarg();
-                    try {
-                        xMax = Integer.parseInt(arg);
-                    }
-                    catch (NumberFormatException e) {
-                        System.err.println("xMax must be an integer");
-                        System.exit(1);
-                    }
-                    break;
-                case 'c':
-                    arg = g.getOptarg();
-                    try {
-                        yMin = Integer.parseInt(arg);
-                    }
-                    catch (NumberFormatException e) {
-                        System.err.println("yMin must be an integer");
-                        System.exit(1);
-                    }
-                    break;
-                case 'd':
-                    arg = g.getOptarg();
-                    try {
-                        yMax = Integer.parseInt(arg);
-                    }
-                    catch (NumberFormatException e) {
-                        System.err.println("yMax must be an integer");
-                        System.exit(1);
-                    }
-                    break;
-                case 'r':
-                    arg = g.getOptarg();
-                    try {
-                        re =  Double.parseDouble(arg);
-                        //constante.setRe(re);
-                    }
-                    catch (NumberFormatException e) {
-                        System.err.println("real must be an integer");
-                        System.exit(1);
-                    }
-                    break;
-                case 'i':
-                    arg = g.getOptarg();
-                    try {
-                        im = Double.parseDouble(arg);
-                        //constante.setIm(im);
-                        //System.out.println(constante.getIm());
-                    }
-                    catch (NumberFormatException e) {
-                        System.err.println("imaginary must be an integer");
-                        System.exit(1);
-                    }
-                    break;
-                case 'f':
-                    arg = g.getOptarg();
-                    File f = new File(arg);;
-                    break;
-                case 'p':
-                    arg = g.getOptarg();
-                    try {
-                        pas =  Double.parseDouble(arg);
-                    }
-                    catch (NumberFormatException e) {
-                        System.err.println("step must be an integer");
-                        System.exit(1);
-                    }
-                    break;
-                case 'm':
-                    mandelbrot = true;
-                    break;
+        String filename = "output.png";
 
-                case '?':
-                    System.out.println("Usage: main [-w width] [-h height] [-a xMin] [-b xMax] [-c yMin] [-d yMax] [-t maxIterations] [-m mandelbrot] "
-                            + "[-r real_part_constant] [-i imaginary_part_constant] [-f fileName] [-p pas]");
-                    System.exit(1);
-                    break; // getopt() already printed an error
-                //
-                default:
-                    System.out.print("getopt() returned " + c + "\n");
+        // create Options object
+        Options options = new Options();
+
+        // add the options
+        options.addOption("w", "width", true, "width of the image");
+        options.addOption("h", "height", true, "height of the image");
+        options.addOption("maxIter", true, "max iterations");
+        options.addOption("cr", true, "real part of the constant");
+        options.addOption("ci", true, "imaginary part of the constant");
+        options.addOption("m", "mandelbrot", false, "generate mandelbrot set image");
+        options.addOption("xmin", true, "X_MIN");
+        options.addOption("xmax", true, "X_MAX");
+        options.addOption("ymin", true, "Y_MIN");
+        options.addOption("ymax", true, "Y_MAX");
+        options.addOption("f", "filename", true, "the filename of the generated image");
+
+        // create the command line parser
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(options, args);
+
+        // get the width
+        if(cmd.hasOption("w")) {
+            try {
+                width = Integer.parseInt(cmd.getOptionValue("w"));
+            }
+            catch (NumberFormatException e) {
+                System.out.println("Invalid width");
+                System.exit(1);
             }
         }
-//
-//        JuliaSetGenerator juliaSetGenerator = new JuliaSetGenerator(width, height, maxIter, -2,2,-2,2);
+
+        // get the height
+        if(cmd.hasOption("h")) {
+            try {
+                height = Integer.parseInt(cmd.getOptionValue("h"));
+            }
+            catch (NumberFormatException e) {
+                System.err.println("Invalid height");
+                System.exit(1);
+            }
+        }
+
+        // check if mandelbrot boolean is set to true
+        if(cmd.hasOption("m")) {
+            mandelbrot = true;
+        }
+
+        // get the real part of the constant
+        if(cmd.hasOption("cr")) {
+            try {
+                cr = Double.parseDouble(cmd.getOptionValue("cr"));
+            }
+            catch (NumberFormatException e) {
+                System.err.println("Invalid real part of the constant");
+                System.exit(1);
+            }
+        }
+
+        // get the imaginary part of the constant
+        if(cmd.hasOption("ci")) {
+            try {
+                ci = Double.parseDouble(cmd.getOptionValue("ci"));
+            }
+            catch (NumberFormatException e) {
+                System.err.println("Invalid imaginary part of the constant");
+                System.exit(1);
+            }
+        }
+
+        // get the max iterations
+        if (cmd.hasOption("maxIter")) {
+            try {
+                maxIter = Integer.parseInt(cmd.getOptionValue("maxIter"));
+            }
+            catch (NumberFormatException e) {
+                System.err.println("Invalid max iterations");
+                System.exit(1);
+            }
+        }
+
+        // get the xmin
+        if (cmd.hasOption("xmin")) {
+            try {
+                xMin = Integer.parseInt(cmd.getOptionValue("xmin"));
+            }
+            catch (NumberFormatException e) {
+                System.err.println("Invalid X_MIN");
+                System.exit(1);
+            }
+        }
+
+        // get the xmax
+        if (cmd.hasOption("xmax")) {
+            try {
+                xMax = Integer.parseInt(cmd.getOptionValue("xmax"));
+            }
+            catch (NumberFormatException e) {
+                System.err.println("Invalid X_MAX");
+                System.exit(1);
+            }
+        }
+
+        // get the ymin
+        if (cmd.hasOption("ymin")) {
+            try {
+                yMin = Integer.parseInt(cmd.getOptionValue("ymin"));
+            }
+            catch (NumberFormatException e) {
+                System.err.println("Invalid Y_MIN");
+                System.exit(1);
+            }
+        }
+
+        // get the ymax
+        if (cmd.hasOption("ymax")) {
+            try {
+                yMax = Integer.parseInt(cmd.getOptionValue("ymax"));
+            }
+            catch (NumberFormatException e) {
+                System.err.println("Invalid Y_MAX");
+                System.exit(1);
+            }
+        }
+
+        // get the filename
+        if (cmd.hasOption("f")) {
+            filename = cmd.getOptionValue("f");
+            if (filename == null) {
+                filename = "output.png";
+            }
+        }
+
+        // generate the image
         if (mandelbrot) {
-            MandelbrotSetGenerator mandelbrotSetGenerator = new MandelbrotSetGenerator(width, height, maxIter, xMin, xMax, yMin, yMax);
-            mandelbrotSetGenerator.generate();
+            MandelbrotSetGenerator m = new MandelbrotSetGenerator(width, height, maxIter, xMin, xMax, yMin, yMax);
+            m.generate();
         }
         else {
-            JuliaSetGenerator juliaSetGenerator = new JuliaSetGenerator(width, height, maxIter, xMin, xMax, yMin, yMax);
-            juliaSetGenerator.generate(re, im);
-//        juliaSetGenerator.generate(0.4, 0.2);
+            JuliaSetGenerator j = new JuliaSetGenerator(width, height, maxIter, xMin, xMax, yMin, yMax, cr, ci);
+            j.generate();
         }
     }
 }
